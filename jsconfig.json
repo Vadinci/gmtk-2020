@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"baseUrl": "./src/js",
+		"paths": {
+			"@Marzipan/*": [
+				"./../../node_modules/MarzipanJS/src/*"
+			],
+			"@Tween/*": [
+				"./../../node_modules/MZPTween/src/*"
+			]
+		}
+	},
+	"exclude": [
+		"node_modules"
+	]
+}

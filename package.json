@@ -1,0 +1,28 @@
+{
+  "name": "gmtk_2020",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "collect-assets": "node ./scripts/collect-assets",
+    "run-dev": "npx webpack --config configs/dev.webpack.config.js",
+    "build": "npx webpack --config configs/build.webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vadinci/gmtk-2020.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vadinci/gmtk-2020/issues"
+  },
+  "homepage": "https://github.com/Vadinci/gmtk-2020#readme",
+  "dependencies": {
+    "copy-webpack-plugin": "^6.0.3",
+    "js-yaml": "^3.14.0",
+    "html-webpack-plugin": "^4.3.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  }
+}

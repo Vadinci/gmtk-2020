@@ -1,3 +1,6 @@
+#custom ignores
+*.DS_Store
+
 # Logs
 logs
 *.log
