@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../_MarzipanJS/MarzipanJS"
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"node_modules/": true
+		}
+	}
+}

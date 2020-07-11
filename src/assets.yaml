@@ -1,3 +1,5 @@
 assets:
-  main/floor: main/floor.png
-  ui/counter-numbers: ui/counter-numbers.png
+  main/buttons: main/buttons.png
+  main/hero: main/hero.png
+  main/tiles: main/tiles.png
+  ui/glyphs: ui/glyphs.png

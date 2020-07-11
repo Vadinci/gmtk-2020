@@ -6,6 +6,10 @@ import StateMachine from "./modules/statemachine";
 import GameContext from "./gamecontext";
 
 import EmptyState from "./states/empty";
+import Tile from "./entities/tile";
+import { TILE_SIZE } from "consts";
+import Transform from "@Marzipan/math/transform";
+import Dungeon from "./modules/dungeon";
 
 
 let Game = function () {
@@ -33,6 +37,27 @@ let Game = function () {
 	let gameContext = new GameContext();
 
 	gameContext.gameScene = scnGame;
+
+	let gridOffset = new Transform(TILE_SIZE * 1.5, TILE_SIZE * 1.5);
+
+	let dungeon = new Dungeon({
+		offsetTransform : gridOffset,
+		width : 10,
+		height : 10
+	});
+	
+	if(IS_DEV){
+		window.dungeon = dungeon;
+	}
+
+	for (let ii = 0; ii < dungeon.tiles.length; ii++){
+		scnGame.addEntity(dungeon.tiles[ii]);
+	}
+
+	for (let ii = 0; ii < dungeon.shifters.length; ii++){
+		scnGame.addEntity(dungeon.shifters[ii].btnA);
+		scnGame.addEntity(dungeon.shifters[ii].btnB);
+	}
 
 	//State machine
 	let stateMachine = new StateMachine(gameContext);

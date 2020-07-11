@@ -1,1 +1,1 @@
-export const STUB = 0;
+export const TILE_SIZE = 40;
