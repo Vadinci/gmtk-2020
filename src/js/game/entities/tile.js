@@ -8,7 +8,12 @@ import { TILE_SIZE } from "../../consts";
 const BASE_PIC = 'main/tiles';
 
 let Tile = function (settings) {
-	let entity = new Entity({
+	//TODO bitmask for collision?
+
+	let _solid = 0;
+	let _actors = [];
+
+	let tile = new Entity({
 		name: 'tile',
 		z: settings.z || 0
 	});
@@ -19,12 +24,24 @@ let Tile = function (settings) {
 		frameWidth: TILE_SIZE,
 		frameHeight: TILE_SIZE
 	});
-
 	sprite.setFrame(Marzipan.random.int(0, 3));
+	tile.addComponent(sprite);
 
-	entity.addComponent(sprite);
 
-	return entity;
+
+
+	tile.addActor = function(a){
+		//TODO prevent double adding
+		tile.scene.addEntity(a);
+		a.transform.parent = tile.transform;
+	};
+
+	Object.defineProperties(tile, {
+		solid : {get : () => _solid },
+		actors : {get : () => [].concat(_actors) },
+	});
+
+	return tile;
 };
 
 export default Tile;

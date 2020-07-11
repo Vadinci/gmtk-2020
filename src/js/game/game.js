@@ -10,6 +10,7 @@ import Tile from "./entities/tile";
 import { TILE_SIZE } from "consts";
 import Transform from "@Marzipan/math/transform";
 import Dungeon from "./modules/dungeon";
+import Actor from "./entities/actor";
 
 
 let Game = function () {
@@ -41,22 +42,38 @@ let Game = function () {
 	let gridOffset = new Transform(TILE_SIZE * 1.5, TILE_SIZE * 1.5);
 
 	let dungeon = new Dungeon({
-		offsetTransform : gridOffset,
-		width : 10,
-		height : 10
+		offsetTransform: gridOffset,
+		width: 10,
+		height: 10
 	});
-	
-	if(IS_DEV){
+
+	//TESTING
+	window.setTimeout(() => {
+		let actor = new Actor(Marzipan.assets.get('yaml', 'actors/hero'));
+		let randomTile = Marzipan.random.pick(dungeon.tiles);
+		randomTile.addActor(actor);
+	}, 50);
+
+	if (IS_DEV) {
 		window.dungeon = dungeon;
 	}
 
-	for (let ii = 0; ii < dungeon.tiles.length; ii++){
+	for (let ii = 0; ii < dungeon.tiles.length; ii++) {
 		scnGame.addEntity(dungeon.tiles[ii]);
 	}
 
-	for (let ii = 0; ii < dungeon.shifters.length; ii++){
-		scnGame.addEntity(dungeon.shifters[ii].btnA);
-		scnGame.addEntity(dungeon.shifters[ii].btnB);
+	for (let ii = 0; ii < dungeon.shifters.length; ii++) {
+		let shifter = dungeon.shifters[ii];
+		scnGame.addEntity(shifter.btnA);
+		scnGame.addEntity(shifter.btnB);
+
+		if (shifter.type === 'horizontal') {
+			shifter.btnA.activate(() => dungeon.shiftRowLeft(shifter.index));
+			shifter.btnB.activate(() => dungeon.shiftRowRight(shifter.index));
+		} else {
+			shifter.btnA.activate(() => dungeon.shiftColUp(shifter.index));
+			shifter.btnB.activate(() => dungeon.shiftColDown(shifter.index));
+		}
 	}
 
 	//State machine

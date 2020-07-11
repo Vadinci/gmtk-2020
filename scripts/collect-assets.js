@@ -8,7 +8,8 @@ const BASE_FOLDER = './src/assets';
 
 const SUPPORTED_TYPES = [
 	'png',
-	'mp3'
+	'mp3',
+	'yaml'
 ];
 
 let collectedAssets = {};

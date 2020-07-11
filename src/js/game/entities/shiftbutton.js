@@ -2,8 +2,12 @@ import Entity from "@Marzipan/core/entity";
 import Marzipan from "@Marzipan/marzipan";
 import Sprite from "@Marzipan/graphics/sprite";
 import Vector2 from "@Marzipan/math/vector2";
+import Clickable from "game/components/clickable";
+import Rectangle from "@Marzipan/math/rectangle";
 
 const BASE_PIC = 'main/buttons';
+
+const NOTHING = () => { };
 
 const DIRECTIONS = {
 	up: 0,
@@ -15,7 +19,9 @@ const DIRECTIONS = {
 let ShiftButton = function (settings) {
 	let _dir = settings.direction || 'up';
 
-	let entity = new Entity({
+	let _callback = NOTHING;
+
+	let button = new Entity({
 		name: 'shiftButton',
 		z: settings.z || 0
 	});
@@ -27,10 +33,28 @@ let ShiftButton = function (settings) {
 		origin: new Vector2(16, 16)
 	});
 	sprite.setFrame(DIRECTIONS[_dir]);
+	button.addComponent(sprite);
 
-	entity.addComponent(sprite);
+	let clickable = new Clickable({
+		area: new Rectangle(-16, -16, 32, 32),
+		callback: () => {
+			_callback();
+		}
+	});
+	button.addComponent(clickable);
 
-	return entity;
+	button.activate = function (cb) {
+		_callback = cb || NOTHING;
+		button.visible = true;
+	};
+
+	button.deactivate = function () {
+		_callback = NOTHING;
+		button.visible = false;
+	};
+
+
+	return button;
 };
 
 export default ShiftButton;

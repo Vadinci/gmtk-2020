@@ -38,6 +38,7 @@ let Dungeon = function (settings) {
 		for (let ii = 0; ii < _width; ii++) {
 			let shifter = {
 				type: 'vertical',
+				index : ii
 			};
 
 			shifter.btnA = new ShiftButton({
@@ -59,6 +60,7 @@ let Dungeon = function (settings) {
 		for (let ii = 0; ii < _height; ii++) {
 			let shifter = {
 				type: 'horizontal',
+				index : ii
 			};
 
 			shifter.btnA = new ShiftButton({

@@ -1,4 +1,5 @@
 assets:
+  actors/hero: actors/hero.yaml
   main/buttons: main/buttons.png
   main/hero: main/hero.png
   main/tiles: main/tiles.png

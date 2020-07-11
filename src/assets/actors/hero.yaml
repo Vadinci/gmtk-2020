@@ -1,0 +1,6 @@
+name : hero
+tags : [hero]
+components : 
+  sprite : 
+    pictureName : 'main/hero'
+    origin : {x : 20, y : 20}
