@@ -4,19 +4,25 @@ let HeroTurnState = function (context, machine) {
 
 	//State functions
 	let start = function () {
+		let heroAI = context.hero.getComponent('ai');
 		
+		heroAI.pick()
+			.then(() => heroAI.execute())
+			.then(() => {
+				machine.setState('enemyTurn');
+			});
 	};
 
 	let update = function () {
-		machine.setState('enemyTurn');
+
 	};
 
 	let end = function () {
-	
+
 	};
 
 	//Handlers
-	
+
 	//State
 	let state = {
 		start,

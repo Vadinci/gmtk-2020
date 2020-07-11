@@ -14,10 +14,10 @@ import StartInputState from "./states/startinput";
 import InputState from "./states/input";
 import HeroTurnState from "./states/heroturn";
 import EnemyTurnState from "./states/enemyturn";
-import Wall from "./entities/wall";
+import GenerateState from "./states/generate";
 
 
-const INITIAL_STATE = 'startInput';
+const INITIAL_STATE = 'generate';
 
 let Game = function () {
 	//seperate scence for background
@@ -58,18 +58,6 @@ let Game = function () {
 
 	gameContext.dungeon = dungeon;
 
-	//TESTING
-	window.setTimeout(() => {
-		let actor = new Actor(Marzipan.assets.get('yaml', 'actors/hero'));
-		let randomTile = Marzipan.random.pick(dungeon.tiles);
-		randomTile.addActor(actor);
-
-		randomTile = Marzipan.random.pick(dungeon.tiles);
-		let wall = new Wall();
-		wall.transform.parent = randomTile.transform;
-		scnGame.addEntity(wall);
-	}, 50);
-
 	if (IS_DEV) {
 		window.dungeon = dungeon;
 	}
@@ -96,6 +84,8 @@ let Game = function () {
 	stateMachine.addState(InputState);
 	stateMachine.addState(HeroTurnState);
 	stateMachine.addState(EnemyTurnState);
+
+	stateMachine.addState(GenerateState);
 
 	stateMachine.setState(INITIAL_STATE);	
 

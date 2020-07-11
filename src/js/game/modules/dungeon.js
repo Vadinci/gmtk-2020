@@ -20,7 +20,9 @@ let Dungeon = function (settings) {
 			_grid[ic] = [];
 			for (let ir = 0; ir < _height; ir++) {
 				let tile = new Tile({
-
+					dungeon: dungeon,
+					col: ic,
+					row: ir
 				});
 
 				tile.position.set(ic * TILE_SIZE, ir * TILE_SIZE);
@@ -38,7 +40,7 @@ let Dungeon = function (settings) {
 		for (let ii = 0; ii < _width; ii++) {
 			let shifter = {
 				type: 'vertical',
-				index : ii
+				index: ii
 			};
 
 			shifter.btnA = new ShiftButton({
@@ -60,7 +62,7 @@ let Dungeon = function (settings) {
 		for (let ii = 0; ii < _height; ii++) {
 			let shifter = {
 				type: 'horizontal',
-				index : ii
+				index: ii
 			};
 
 			shifter.btnA = new ShiftButton({
@@ -85,6 +87,7 @@ let Dungeon = function (settings) {
 		for (let ii = 1; ii < _width; ii++) {
 			_grid[ii - 1][row] = _grid[ii][row];
 			_grid[ii][row].position.x = (ii - 1) * TILE_SIZE;
+			_grid[ii][row].setPosition(ii - 1, row);
 		}
 
 		_grid[_width - 1][row] = stored;
@@ -97,6 +100,7 @@ let Dungeon = function (settings) {
 		for (let ii = _width - 2; ii >= 0; ii--) {
 			_grid[ii + 1][row] = _grid[ii][row];
 			_grid[ii][row].position.x = (ii + 1) * TILE_SIZE;
+			_grid[ii][row].setPosition(ii + 1, row);
 		}
 
 		_grid[0][row] = stored;
@@ -109,6 +113,7 @@ let Dungeon = function (settings) {
 		for (let ii = 1; ii < _height; ii++) {
 			_grid[col][ii - 1] = _grid[col][ii];
 			_grid[col][ii].position.y = (ii - 1) * TILE_SIZE;
+			_grid[col][ii].setPosition(col, ii - 1);
 		}
 
 		_grid[col][_height - 1] = stored;
@@ -121,20 +126,27 @@ let Dungeon = function (settings) {
 		for (let ii = _height - 2; ii >= 0; ii--) {
 			_grid[col][ii + 1] = _grid[col][ii];
 			_grid[col][ii].position.y = (ii + 1) * TILE_SIZE;
+			_grid[col][ii].setPosition(col, ii + 1);
 		}
 
 		_grid[col][0] = stored;
 		stored.position.y = 0;
 	};
 
-	_createTiles();
-	_createShifters();
+	let getTileAt = function(col, row){
+		if (col < 0 || col >= _width) return null;
+		if (row < 0 || row >= _height) return null;
+
+		return _grid[col][row];
+	};
 
 	let dungeon = {
 		shiftRowLeft,
 		shiftRowRight,
 		shiftColUp,
-		shiftColDown
+		shiftColDown,
+
+		getTileAt
 	};
 
 	Object.defineProperties(dungeon, {
@@ -143,6 +155,9 @@ let Dungeon = function (settings) {
 		tiles: { get: () => [].concat(_tiles) },
 		shifters: { get: () => [].concat(_shifters) }
 	});
+
+	_createTiles();
+	_createShifters();
 
 	return dungeon;
 };

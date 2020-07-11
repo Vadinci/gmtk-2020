@@ -5,6 +5,9 @@ let GameContext = function(){
 
 		dungeon : null,
 
+		hero : null,
+		enemies : [],
+
 		currentMove : {
 			direction : 'none',
 			amount : 0

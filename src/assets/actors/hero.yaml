@@ -1,6 +1,7 @@
-name : hero
-tags : [hero]
+name : Hero
+tags : [hero, human]
 components : 
   sprite : 
     pictureName : 'main/hero'
     origin : {x : 20, y : 20}
+  ai : {}

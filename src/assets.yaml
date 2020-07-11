@@ -1,6 +1,8 @@
 assets:
+  actors/goblin: actors/goblin.yaml
   actors/hero: actors/hero.yaml
   main/buttons: main/buttons.png
+  main/goblin: main/goblin.png
   main/hero: main/hero.png
   main/tiles: main/tiles.png
   main/walls: main/walls.png

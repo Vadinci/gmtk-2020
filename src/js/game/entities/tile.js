@@ -13,6 +13,10 @@ let Tile = function (settings) {
 	let _solid = 0;
 	let _actors = [];
 
+	let _dungeon = settings.dungeon;
+	let _col = settings.col;
+	let _row = settings.row;
+
 	let tile = new Entity({
 		name: 'tile',
 		z: settings.z || 0
@@ -30,15 +34,46 @@ let Tile = function (settings) {
 
 
 
-	tile.addActor = function(a){
-		//TODO prevent double adding
-		tile.scene.addEntity(a);
+	tile.addActor = function (a) {
+		let idx = _actors.indexOf(a);
+		if (idx !== -1) {
+			console.warn('actor already present');
+			return;
+		}
+
 		a.transform.parent = tile.transform;
+
+		_actors.push(a);
+
+		a.setTile(tile);
+	};
+
+	tile.removeActor = function (a) {
+		let idx = _actors.indexOf(a);
+		if (idx === -1) {
+			console.warn('actor not present');
+			return;
+		}
+		
+		_actors.splice(idx, 1);
+	}
+
+	tile.setSolid = function (s) {
+		_solid = s;
+	};
+
+	tile.setPosition = function (c, r) {
+		_col = c === undefined ? _col : c;
+		_row = r === undefined ? _row : r;
 	};
 
 	Object.defineProperties(tile, {
-		solid : {get : () => _solid },
-		actors : {get : () => [].concat(_actors) },
+		solid: { get: () => _solid },
+		actors: { get: () => [].concat(_actors) },
+		dungeon: { get: () => _dungeon },
+
+		col: { get: () => _col },
+		row: { get: () => _row },
 	});
 
 	return tile;
