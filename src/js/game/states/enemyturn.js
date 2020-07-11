@@ -1,5 +1,5 @@
 
-let EmptyState = function (context, machine) {
+let EnemyTurnState = function (context, machine) {
 	//Variables
 
 	//State functions
@@ -8,7 +8,7 @@ let EmptyState = function (context, machine) {
 	};
 
 	let update = function () {
-	
+		machine.setState('startInput');
 	};
 
 	let end = function () {
@@ -25,14 +25,14 @@ let EmptyState = function (context, machine) {
 	};
 
 	Object.defineProperty(state, 'key', {
-		get: () => 'empty'
+		get: () => 'enemyTurn'
 	});
 
 	return state;
 };
 
-Object.defineProperty(EmptyState, 'key', {
-	get: () => 'empty'
+Object.defineProperty(EnemyTurnState, 'key', {
+	get: () => 'enemyTurn'
 });
 
-export default EmptyState;
+export default EnemyTurnState;

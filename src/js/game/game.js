@@ -5,16 +5,22 @@ import Vector2 from "@Marzipan/math/vector2";
 import StateMachine from "./modules/statemachine";
 import GameContext from "./gamecontext";
 
-import EmptyState from "./states/empty";
-import Tile from "./entities/tile";
 import { TILE_SIZE } from "consts";
 import Transform from "@Marzipan/math/transform";
 import Dungeon from "./modules/dungeon";
 import Actor from "./entities/actor";
 
+import StartInputState from "./states/startinput";
+import InputState from "./states/input";
+import HeroTurnState from "./states/heroturn";
+import EnemyTurnState from "./states/enemyturn";
+import Wall from "./entities/wall";
+
+
+const INITIAL_STATE = 'startInput';
 
 let Game = function () {
-	//white background
+	//seperate scence for background
 	let scnBackground = new Scene({
 		name: 'background',
 		layer: -1
@@ -23,22 +29,25 @@ let Game = function () {
 	(() => { //scope tl and br
 		let topLeft = new Vector2(0, 0);
 		let botRight = new Vector2(Marzipan.screen.width, Marzipan.screen.height);
+
 		scnBackground.on('preDraw', data => {
 			data.renderer.setTransform(scnBackground.transform.globalMatrix);
 			data.renderer.drawRect(topLeft, botRight, '#ff00ff');
 		});
 	})();
 
+	//game scene
 	let scnGame = new Scene({
 		name: 'game',
 		layer: 0
 	});
 
-	//game Context
+	//game context (for state machine states)
 	let gameContext = new GameContext();
 
 	gameContext.gameScene = scnGame;
 
+	//TODO move somewhere nice?
 	let gridOffset = new Transform(TILE_SIZE * 1.5, TILE_SIZE * 1.5);
 
 	let dungeon = new Dungeon({
@@ -47,49 +56,59 @@ let Game = function () {
 		height: 10
 	});
 
+	gameContext.dungeon = dungeon;
+
 	//TESTING
 	window.setTimeout(() => {
 		let actor = new Actor(Marzipan.assets.get('yaml', 'actors/hero'));
 		let randomTile = Marzipan.random.pick(dungeon.tiles);
 		randomTile.addActor(actor);
+
+		randomTile = Marzipan.random.pick(dungeon.tiles);
+		let wall = new Wall();
+		wall.transform.parent = randomTile.transform;
+		scnGame.addEntity(wall);
 	}, 50);
 
 	if (IS_DEV) {
 		window.dungeon = dungeon;
 	}
 
+	//add tiles to scene
 	for (let ii = 0; ii < dungeon.tiles.length; ii++) {
 		scnGame.addEntity(dungeon.tiles[ii]);
 	}
 
+	//add shift buttons to scene
 	for (let ii = 0; ii < dungeon.shifters.length; ii++) {
 		let shifter = dungeon.shifters[ii];
 		scnGame.addEntity(shifter.btnA);
 		scnGame.addEntity(shifter.btnB);
 
-		if (shifter.type === 'horizontal') {
-			shifter.btnA.activate(() => dungeon.shiftRowLeft(shifter.index));
-			shifter.btnB.activate(() => dungeon.shiftRowRight(shifter.index));
-		} else {
-			shifter.btnA.activate(() => dungeon.shiftColUp(shifter.index));
-			shifter.btnB.activate(() => dungeon.shiftColDown(shifter.index));
-		}
+		shifter.btnA.deactivate();
+		shifter.btnB.deactivate();
 	}
 
 	//State machine
 	let stateMachine = new StateMachine(gameContext);
 
-	stateMachine.addState(EmptyState);
+	stateMachine.addState(StartInputState);
+	stateMachine.addState(InputState);
+	stateMachine.addState(HeroTurnState);
+	stateMachine.addState(EnemyTurnState);
 
-	stateMachine.setState('empty');
+	stateMachine.setState(INITIAL_STATE);	
 
+
+	//scene handlers. Just tacking these on scene events ;)
 	scnGame.on('preUpdate', stateMachine.update);
 
-
 	scnGame.on('start', data => {
+		//when the game scene is added, we also want to add the background scene
 		Marzipan.engine.addScene(scnBackground);
 	});
 
+	//clean up
 	scnGame.on('die', data => {
 		Marzipan.engine.removeScene(scnBackground);
 

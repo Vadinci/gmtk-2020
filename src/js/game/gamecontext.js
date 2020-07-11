@@ -1,7 +1,9 @@
 
 let GameContext = function(){
 	return {
-		gameScene: undefined,
+		gameScene: null,
+
+		dungeon : null
 	};
 };
 

@@ -3,4 +3,7 @@ assets:
   main/buttons: main/buttons.png
   main/hero: main/hero.png
   main/tiles: main/tiles.png
+  main/walls: main/walls.png
+  ui/button_confirm: ui/button_confirm.png
+  ui/button_reset: ui/button_reset.png
   ui/glyphs: ui/glyphs.png
