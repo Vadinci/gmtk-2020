@@ -12,3 +12,12 @@ components :
   animators/simplemove : {}
   attackable :
     health : 1
+  loot : 
+    options :
+      - type : nothing
+        weight : 5
+      - type : gold
+        weight : 3
+        value : 
+          min : 20
+          max : 30

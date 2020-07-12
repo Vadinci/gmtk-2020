@@ -17,7 +17,6 @@ let Attackable = function (settings) {
 		_actor.emit('hit');
 
 		data.addPromise(() => new Promise((resolve, reject) => {
-			console.log('start tween');
 			Marzipan.events.emit('logLine', `${other.coloredName} attacks ${_actor.coloredName}!`);
 
 			let delta = Vector2.sub(_actor.tile.position, other.tile.position);
@@ -41,17 +40,18 @@ let Attackable = function (settings) {
 		}));
 
 		if (_health === 0) {
-			_actor.emit('die', {
-				addPromise: data.addPromise
-			});
 			data.addPromise(() => new Promise((resolve, reject) => {
 				Marzipan.events.emit('logLine', `${_actor.coloredName} dies!`);
 
 				_actor.active = false;
 				_actor.visible = false;
-				console.log('removed actor!');
+				
 				resolve();
 			}));
+
+			_actor.emit('die', {
+				addPromise: data.addPromise
+			});
 		}
 	};
 

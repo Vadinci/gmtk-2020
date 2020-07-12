@@ -24,6 +24,15 @@ let EnemyTurnState = function (context, machine) {
 				lastPromise = lastPromise.then(() => enemyAi.pick());
 			}
 			lastPromise = lastPromise.then(() => enemyAi.execute());
+
+			lastPromise = lastPromise.then(() => {
+				if (!enemy.active) {
+					//this enemy is gone
+					enemy.tile.removeActor(enemy);
+					context.gameScene.removeEntity(enemy);
+					context.enemies.splice(ii, 1);
+				}
+			});
 		}
 
 		if (!lastPromise) {

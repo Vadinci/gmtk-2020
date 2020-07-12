@@ -4,13 +4,19 @@ import Sprite from "@Marzipan/graphics/sprite";
 import AI from "game/components/ai";
 import SimpleMoveAnimator from "game/components/animators/simplemove";
 import Attackable from "game/components/attackable";
+import Openable from "game/components/openable";
+import Loot from "game/components/loot";
+import Pickup from "game/components/pickup";
 
 //TODO this doesn't scale
 let COMPONENT_MAP = {
 	sprite: Sprite,
 	ai: AI,
 	'animators/simplemove': SimpleMoveAnimator,
-	attackable: Attackable
+	attackable: Attackable,
+	openable : Openable,
+	loot : Loot,
+	pickup : Pickup
 };
 
 let Actor = function (settings) {

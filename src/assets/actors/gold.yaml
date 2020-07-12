@@ -1,0 +1,11 @@
+name : Gold
+tags : [gold, loot]
+color : '#fff200'
+
+components : 
+  sprite : 
+    pictureName : 'main/gold'
+    origin : {x : 20, y : 20}
+  pickup : {}
+  pickups/gold : 
+    value : 1 #default value, should be overriden by whatever spawns this actor

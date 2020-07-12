@@ -6,3 +6,12 @@ components :
   sprite : 
     pictureName : 'main/treasure'
     origin : {x : 20, y : 20}
+  openable : {}
+  loot : 
+    options :
+      - type : 'gold'
+        weight : 10
+        value : 
+          min : 20
+          max : 30
+    
