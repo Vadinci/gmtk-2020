@@ -15,6 +15,7 @@ import InputState from "./states/input";
 import HeroTurnState from "./states/heroturn";
 import EnemyTurnState from "./states/enemyturn";
 import GenerateState from "./states/generate";
+import Log from "ui/log";
 
 
 const INITIAL_STATE = 'generate';
@@ -35,6 +36,10 @@ let Game = function () {
 			data.renderer.drawRect(topLeft, botRight, '#ff00ff');
 		});
 	})();
+
+	let scnLog = new Log({
+
+	});
 
 	//game scene
 	let scnGame = new Scene({
@@ -87,7 +92,7 @@ let Game = function () {
 
 	stateMachine.addState(GenerateState);
 
-	stateMachine.setState(INITIAL_STATE);	
+	stateMachine.setState(INITIAL_STATE);
 
 
 	//scene handlers. Just tacking these on scene events ;)
@@ -96,10 +101,12 @@ let Game = function () {
 	scnGame.on('start', data => {
 		//when the game scene is added, we also want to add the background scene
 		Marzipan.engine.addScene(scnBackground);
+		Marzipan.engine.addScene(scnLog);
 	});
 
 	//clean up
 	scnGame.on('die', data => {
+		Marzipan.engine.removeScene(scnLog);
 		Marzipan.engine.removeScene(scnBackground);
 
 		stateMachine.setState('nothing');	//force stateMachine to an undefined state so current state gets properly exited

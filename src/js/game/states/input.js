@@ -33,6 +33,8 @@ let InputState = function (context, machine) {
 	//Handlers
 	let _onConfirm = function(){
 		//TODO check move is valid
+
+		Marzipan.events.emit('logLine', "The walls are shifting...");
 		machine.setState('heroTurn');
 	};
 

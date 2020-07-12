@@ -1,7 +1,9 @@
 name : Goblin
 tags : [goblin, monster]
+
 components : 
   sprite : 
     pictureName : 'main/goblin'
     origin : {x : 20, y : 20}
   ai : {}
+  animators/simplemove : {}

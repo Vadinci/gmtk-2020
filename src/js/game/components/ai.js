@@ -57,7 +57,7 @@ let AI = function (settings) {
 			let bonusScore = 0;
 
 			//always slightly prefer interacting over aimless moving
-			if (t.actors.length){
+			if (t.actors.length) {
 				bonusScore = 1;
 			}
 
@@ -80,18 +80,35 @@ let AI = function (settings) {
 	let execute = function () {
 		let action = _pickedAction;
 
-		console.log(action.type, action.tile.col, action.tile.row);
-
-		if (action.type === 'move') {
-			_actor.tile.removeActor(_actor);
-			action.tile.addActor(_actor);
+		if (!action) {
+			Marzipan.events.emit('logLine', `${_actor.name} loafs around.`);
 
 			return new Promise((resolve, reject) => {
 				//TODO animators and whatnot
 				resolve();
 			});
+		}
+
+		if (action.type === 'move') {
+			let oldTile = _actor.tile;
+			let newTile = action.tile;
+
+			_actor.tile.removeActor(_actor);
+			action.tile.addActor(_actor);
+
+			Marzipan.events.emit('logLine', `${_actor.name} wanders aimlessly.`);
+
+			return new Promise((resolve, reject) => {
+				_actor.handleMove({
+					onComplete: resolve,
+					from: oldTile,
+					to: newTile
+				});
+			});
 		} else {
 			//find destination tile and move to it, then interact
+			let other = action.tile.actors[0];
+
 			let dc = _actor.tile.col - action.tile.col;
 			if (dc !== 0) dc /= Math.abs(dc);
 
@@ -102,6 +119,8 @@ let AI = function (settings) {
 
 			_actor.tile.removeActor(_actor);
 			targetTile.addActor(_actor);
+
+			Marzipan.events.emit('logLine', `${_actor.name} interacts with ${other.name}!`);
 
 			//TODO interact
 

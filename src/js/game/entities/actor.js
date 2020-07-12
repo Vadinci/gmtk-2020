@@ -2,10 +2,12 @@ import Entity from "@Marzipan/core/entity";
 import ENSURE from "@Marzipan/utils/ensure";
 import Sprite from "@Marzipan/graphics/sprite";
 import AI from "game/components/ai";
+import SimpleMoveAnimator from "game/components/animators/simplemove";
 
 let COMPONENT_MAP = {
 	sprite: Sprite,
-	ai: AI
+	ai: AI,
+	'animators/simplemove': SimpleMoveAnimator
 };
 
 let Actor = function (settings) {
@@ -31,8 +33,23 @@ let Actor = function (settings) {
 		}
 	}
 
+	actor.handleMove = function (data) {
+		let promises = [];
 
-	actor.setTile = function(t){
+		actor.emit('handleMove', {
+			addPromise: promise => { promises.push(promise); },
+			from: data.from,
+			to: data.to
+		});
+
+		let p = Promise.resolve();
+		for (let ii = 0; ii < promises.length; ii++) {
+			p = p.then(() => promises[ii]);
+		}
+		p.then(() => data.onComplete());
+	};
+
+	actor.setTile = function (t) {
 		_tile = t;
 	};
 

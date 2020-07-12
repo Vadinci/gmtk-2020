@@ -92,6 +92,7 @@ let Dungeon = function (settings) {
 
 		_grid[_width - 1][row] = stored;
 		stored.position.x = (_width - 1) * TILE_SIZE;
+		stored.setPosition(_width - 1, row);
 	};
 
 	let shiftRowRight = function (row) {
@@ -105,6 +106,7 @@ let Dungeon = function (settings) {
 
 		_grid[0][row] = stored;
 		stored.position.x = 0;
+		stored.setPosition(0, row);
 	};
 
 	let shiftColUp = function (col) {
@@ -118,6 +120,7 @@ let Dungeon = function (settings) {
 
 		_grid[col][_height - 1] = stored;
 		stored.position.y = (_height - 1) * TILE_SIZE;
+		stored.setPosition(col, _height - 1);
 	};
 
 	let shiftColDown = function (col) {
@@ -131,6 +134,7 @@ let Dungeon = function (settings) {
 
 		_grid[col][0] = stored;
 		stored.position.y = 0;
+		stored.setPosition(col, 0);
 	};
 
 	let getTileAt = function(col, row){
