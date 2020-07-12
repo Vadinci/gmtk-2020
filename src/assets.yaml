@@ -1,9 +1,12 @@
 assets:
+  actors/exit: actors/exit.yaml
   actors/goblin: actors/goblin.yaml
   actors/gold: actors/gold.yaml
   actors/hero: actors/hero.yaml
   actors/treasure: actors/treasure.yaml
+  main/background: main/background.png
   main/buttons: main/buttons.png
+  main/exit: main/exit.png
   main/goblin: main/goblin.png
   main/gold: main/gold.png
   main/hero: main/hero.png
@@ -12,4 +15,7 @@ assets:
   main/walls: main/walls.png
   ui/button_confirm: ui/button_confirm.png
   ui/button_reset: ui/button_reset.png
+  ui/counter: ui/counter.png
   ui/glyphs: ui/glyphs.png
+  ui/icon_gold: ui/icon_gold.png
+  ui/icon_lives: ui/icon_lives.png

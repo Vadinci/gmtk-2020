@@ -19,7 +19,7 @@ module.exports = {
         ],
         alias: {
             '@Marzipan': path.resolve(ROOT, './node_modules/MarzipanJS/src'),
-            '@Tween': path.resolve(ROOT, './lib/links/tween'),
+            '@Tween': path.resolve(ROOT,  './node_modules/MZPTweenJS/src'),
         }
     },
     output: {

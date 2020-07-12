@@ -8,14 +8,17 @@ import GameContext from "./gamecontext";
 import { TILE_SIZE } from "consts";
 import Transform from "@Marzipan/math/transform";
 import Dungeon from "./modules/dungeon";
-import Actor from "./entities/actor";
+
+import Log from "ui/log";
 
 import StartInputState from "./states/startinput";
 import InputState from "./states/input";
 import HeroTurnState from "./states/heroturn";
 import EnemyTurnState from "./states/enemyturn";
 import GenerateState from "./states/generate";
-import Log from "ui/log";
+import DeathState from "./states/death";
+import SpawnEnemyState from "./states/spawnenemy";
+import SessionHUD from "ui/sessionhud";
 
 
 const INITIAL_STATE = 'generate';
@@ -28,16 +31,19 @@ let Game = function () {
 	});
 
 	(() => { //scope tl and br
-		let topLeft = new Vector2(0, 0);
-		let botRight = new Vector2(Marzipan.screen.width, Marzipan.screen.height);
+		let pic = Marzipan.assets.get('picture', 'main/background');
 
 		scnBackground.on('preDraw', data => {
 			data.renderer.setTransform(scnBackground.transform.globalMatrix);
-			data.renderer.drawRect(topLeft, botRight, '#ff00ff');
+			data.renderer.drawPicture(pic, 0, 0);
 		});
 	})();
 
 	let scnLog = new Log({
+
+	});
+
+	let scnHud = new SessionHUD({
 
 	});
 
@@ -51,6 +57,7 @@ let Game = function () {
 	let gameContext = new GameContext();
 
 	gameContext.gameScene = scnGame;
+	gameContext.hudScene = scnHud;
 
 	//TODO move somewhere nice?
 	let gridOffset = new Transform(TILE_SIZE * 1.5, TILE_SIZE * 1.5);
@@ -89,6 +96,8 @@ let Game = function () {
 	stateMachine.addState(InputState);
 	stateMachine.addState(HeroTurnState);
 	stateMachine.addState(EnemyTurnState);
+	stateMachine.addState(DeathState);
+	stateMachine.addState(SpawnEnemyState);
 
 	stateMachine.addState(GenerateState);
 
@@ -102,10 +111,12 @@ let Game = function () {
 		//when the game scene is added, we also want to add the background scene
 		Marzipan.engine.addScene(scnBackground);
 		Marzipan.engine.addScene(scnLog);
+		Marzipan.engine.addScene(scnHud);
 	});
 
 	//clean up
 	scnGame.on('die', data => {
+		Marzipan.engine.removeScene(scnHud);
 		Marzipan.engine.removeScene(scnLog);
 		Marzipan.engine.removeScene(scnBackground);
 

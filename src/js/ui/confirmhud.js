@@ -26,6 +26,7 @@ let ConfirmHUD = function(settings){
 			settings.onConfirm && settings.onConfirm();
 		}
 	}));
+	btnConfirm.position.set(120, 40);
 
 	scene.addEntity(btnConfirm);
 

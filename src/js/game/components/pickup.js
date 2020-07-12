@@ -3,9 +3,13 @@ import Tween from "@Tween/tween";
 import { IN_OVERSHOOT, OUT_ELASTIC, IN_OUT_QUAD } from "@Tween/ease";
 import Vector2 from "@Marzipan/math/vector2";
 import { TILE_SIZE } from "consts";
+import Session from "game/session";
 
 let Pickup = function (settings) {
 	let _actor;
+
+	let _type = settings.type;
+	let _value = settings.value;
 
 	let _onInteract = function (data) {
 		let other = data.other;
@@ -17,6 +21,8 @@ let Pickup = function (settings) {
 		data.addPromise(() => new Promise((resolve, reject) => {
 			//TODO get value here?
 			Marzipan.events.emit('logLine', `${other.coloredName} picks up ${_actor.coloredName}.`);
+
+			Session.add(_type, _value);
 
 			other.tile.removeActor(other);
 			_actor.tile.addActor(other);
@@ -49,19 +55,25 @@ let Pickup = function (settings) {
 		});
 	};
 
-	let start = function (data) {
+	let _onSetValue = function(v){
+		_value = v;
+	};
+
+	let added = function (data) {
 		_actor = data.entity;
 
 		_actor.on('handleInteract', _onInteract);
+		_actor.on('setValue', _onSetValue);
 	};
 
 	let die = function () {
 		_actor.off('handleInteract', _onInteract);
+		_actor.off('setValue', _onSetValue);
 	};
 
 	let pickup = {
 		name: 'pickup',
-		start,
+		added,
 		die
 	};
 

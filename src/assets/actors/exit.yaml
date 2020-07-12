@@ -1,0 +1,9 @@
+name : Stairs
+tags : [exit]
+color : '#c7b299'
+
+components : 
+  sprite : 
+    pictureName : 'main/exit'
+    origin : {x : 20, y : 20}
+  exit : {}

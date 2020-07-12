@@ -79,6 +79,14 @@ let UICounter = function (settings) {
 		setValue
 	};
 
+	Object.defineProperties(counter, {
+		transform: { get: () => _transform },
+
+		position: { get: () => _transform.position },
+		scale: { get: () => _transform.scale }
+		// rotation: { get: () => _transform }, TODO
+	});
+
 	_findDrawInstructions();
 
 	return counter;

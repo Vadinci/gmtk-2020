@@ -14,7 +14,7 @@ let Attackable = function (settings) {
 		//TODO damage?
 		_health--;
 
-		_actor.emit('hit');
+		_actor.emit('hit', data);
 
 		data.addPromise(() => new Promise((resolve, reject) => {
 			Marzipan.events.emit('logLine', `${other.coloredName} attacks ${_actor.coloredName}!`);
@@ -45,7 +45,10 @@ let Attackable = function (settings) {
 
 				_actor.active = false;
 				_actor.visible = false;
-				
+
+				_actor.tile.removeActor(_actor);
+				_actor.scene.removeEntity(_actor);
+
 				resolve();
 			}));
 
@@ -68,7 +71,9 @@ let Attackable = function (settings) {
 	let attackable = {
 		name: 'attackable',
 		start,
-		die
+		die,
+
+		setHealth: h => { _health = h; }
 	};
 
 	Object.defineProperties(attackable, {

@@ -7,6 +7,7 @@ import Attackable from "game/components/attackable";
 import Openable from "game/components/openable";
 import Loot from "game/components/loot";
 import Pickup from "game/components/pickup";
+import Exit from "game/components/exit";
 
 //TODO this doesn't scale
 let COMPONENT_MAP = {
@@ -16,7 +17,8 @@ let COMPONENT_MAP = {
 	attackable: Attackable,
 	openable : Openable,
 	loot : Loot,
-	pickup : Pickup
+	pickup : Pickup,
+	exit : Exit
 };
 
 let Actor = function (settings) {

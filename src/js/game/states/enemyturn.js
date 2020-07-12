@@ -1,10 +1,11 @@
 
 let EnemyTurnState = function (context, machine) {
 	//Variables
-
+	let _stateActive = false;
 	//State functions
 	let start = function () {
 		let lastPromise;
+		_stateActive = true;
 
 		for (let ii = context.enemies.length - 1; ii >= 0; ii--) {
 			let enemy = context.enemies[ii];
@@ -12,8 +13,6 @@ let EnemyTurnState = function (context, machine) {
 
 			if (!enemy.active) {
 				//this enemy is gone
-				enemy.tile.removeActor(enemy);
-				context.gameScene.removeEntity(enemy);
 				context.enemies.splice(ii, 1);
 				continue;
 			}
@@ -27,9 +26,6 @@ let EnemyTurnState = function (context, machine) {
 
 			lastPromise = lastPromise.then(() => {
 				if (!enemy.active) {
-					//this enemy is gone
-					enemy.tile.removeActor(enemy);
-					context.gameScene.removeEntity(enemy);
 					context.enemies.splice(ii, 1);
 				}
 			});
@@ -42,7 +38,8 @@ let EnemyTurnState = function (context, machine) {
 		}
 
 		lastPromise.then(() => {
-			machine.setState('startInput');
+			if(!_stateActive) return;	//something caused us to exit this state already
+			machine.setState('spawnEnemy');
 		});
 	};
 
@@ -50,7 +47,7 @@ let EnemyTurnState = function (context, machine) {
 	};
 
 	let end = function () {
-
+		_stateActive = false;
 	};
 
 	//Handlers

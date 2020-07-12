@@ -36,12 +36,13 @@ let Loot = function (settings) {
 
 		data.addPromise(() => new Promise((resolve, reject) => {
 			let lootActor = new Actor(Marzipan.assets.get('yaml', 'actors/' + pickedType));
-			lootActor.emit('setValue', pickedValue);
 
 			Marzipan.events.emit('logLine', `${_actor.coloredName} drops ${lootActor.coloredName}`);
 
 			tile.addActor(lootActor);
 			scene.addEntity(lootActor);
+
+			lootActor.emit('setValue', pickedValue);
 
 			resolve();
 		}));

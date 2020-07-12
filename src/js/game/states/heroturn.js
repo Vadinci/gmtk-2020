@@ -1,14 +1,18 @@
 
 let HeroTurnState = function (context, machine) {
 	//Variables
+	let stateActive = false;
 
 	//State functions
 	let start = function () {
+		stateActive = true;
 		let heroAI = context.hero.getComponent('ai');
 		
 		heroAI.pick()
 			.then(() => heroAI.execute())
 			.then(() => {
+				//something caused us to leave this state early
+				if (!stateActive) return;
 				machine.setState('enemyTurn');
 			});
 	};
@@ -18,7 +22,7 @@ let HeroTurnState = function (context, machine) {
 	};
 
 	let end = function () {
-
+		stateActive = false;
 	};
 
 	//Handlers
