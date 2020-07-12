@@ -16,6 +16,8 @@ let AI = function (settings) {
 
 	let _actor;
 
+	let _interactWith = settings.interactWith || {};
+
 	let _pickedAction = {};
 
 	let pick = function () {
@@ -37,7 +39,21 @@ let AI = function (settings) {
 
 				if (tile.solid) break;
 				possibleTiles.push(tile);
-				if (tile.actors.length !== 0) break;
+
+				if (tile.actors.length !== 0) {
+					let other = tile.actors[0];
+					let canInteract = false;
+					for (let key in _interactWith) {
+						if (other.hasTag(key)) {
+							canInteract = true;
+							break;
+						}
+					}
+					if (!canInteract) {
+						possibleTiles.pop();
+					}
+					break
+				}
 			}
 		};
 
@@ -56,9 +72,12 @@ let AI = function (settings) {
 
 			let bonusScore = 0;
 
-			//always slightly prefer interacting over aimless moving
 			if (t.actors.length) {
-				bonusScore = 1;
+				let other = t.actors[0];
+				for (let key in _interactWith) {
+					if (other.hasTag(key))
+						bonusScore = Math.max(bonusScore, _interactWith[key]);
+				}
 			}
 
 			action.score += bonusScore;
@@ -79,6 +98,7 @@ let AI = function (settings) {
 
 	let execute = function () {
 		let action = _pickedAction;
+		let oldTile = _actor.tile;
 
 		if (!action) {
 			Marzipan.events.emit('logLine', `${_actor.name} loafs around.`);
@@ -90,7 +110,6 @@ let AI = function (settings) {
 		}
 
 		if (action.type === 'move') {
-			let oldTile = _actor.tile;
 			let newTile = action.tile;
 
 			_actor.tile.removeActor(_actor);
@@ -120,13 +139,19 @@ let AI = function (settings) {
 			_actor.tile.removeActor(_actor);
 			targetTile.addActor(_actor);
 
-			Marzipan.events.emit('logLine', `${_actor.name} interacts with ${other.name}!`);
-
 			//TODO interact
 
 			return new Promise((resolve, reject) => {
-				//TODO animators and whatnot
-				resolve();
+				_actor.handleMove({
+					onComplete: () => {
+						other.handleInteract({
+							onComplete: resolve,
+							other: _actor
+						});
+					},
+					from: oldTile,
+					to: targetTile
+				});
 			});
 		}
 	};

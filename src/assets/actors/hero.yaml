@@ -5,5 +5,12 @@ components :
   sprite : 
     pictureName : 'main/hero'
     origin : {x : 20, y : 20}
-  ai : {}
+  ai : 
+   interactWith :
+      monster : 4
+      treasure : 6
+      exit : 2
+      loot : 5
   animators/simplemove : {}
+  attackable :
+    health : 3

@@ -6,25 +6,33 @@ let EnemyTurnState = function (context, machine) {
 	let start = function () {
 		let lastPromise;
 
-		for (let ii = 0; ii < context.enemies.length; ii++) {
+		for (let ii = context.enemies.length - 1; ii >= 0; ii--) {
 			let enemy = context.enemies[ii];
 			let enemyAi = enemy.getComponent('ai');
-			
+
+			if (!enemy.active) {
+				//this enemy is gone
+				enemy.tile.removeActor(enemy);
+				context.gameScene.removeEntity(enemy);
+				context.enemies.splice(ii, 1);
+				continue;
+			}
+
 			if (!lastPromise) {
 				lastPromise = enemyAi.pick();
 			} else {
 				lastPromise = lastPromise.then(() => enemyAi.pick());
 			}
-			lastPromise = lastPromise.then(()=>enemyAi.execute());
+			lastPromise = lastPromise.then(() => enemyAi.execute());
 		}
 
-		if (!lastPromise){
+		if (!lastPromise) {
 			//there are no enemies
 			machine.setState('startInput');
 			return;
 		}
 
-		lastPromise.then(()=>{
+		lastPromise.then(() => {
 			machine.setState('startInput');
 		});
 	};
