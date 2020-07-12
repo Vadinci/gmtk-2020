@@ -101,7 +101,7 @@ let AI = function (settings) {
 		let oldTile = _actor.tile;
 
 		if (!action) {
-			Marzipan.events.emit('logLine', `${_actor.name} loafs around.`);
+			Marzipan.events.emit('logLine', `${_actor.coloredName} loafs around.`);
 
 			return new Promise((resolve, reject) => {
 				//TODO animators and whatnot
@@ -115,7 +115,7 @@ let AI = function (settings) {
 			_actor.tile.removeActor(_actor);
 			action.tile.addActor(_actor);
 
-			Marzipan.events.emit('logLine', `${_actor.name} wanders aimlessly.`);
+			Marzipan.events.emit('logLine', `${_actor.coloredName} wanders aimlessly.`);
 
 			return new Promise((resolve, reject) => {
 				_actor.handleMove({

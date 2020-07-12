@@ -10,13 +10,14 @@ let COMPONENT_MAP = {
 	sprite: Sprite,
 	ai: AI,
 	'animators/simplemove': SimpleMoveAnimator,
-	attackable : Attackable
+	attackable: Attackable
 };
 
 let Actor = function (settings) {
 	ENSURE(settings);
 
 	let _tile = null;
+	let _color = settings.color || '#ffffff';
 
 	let actor = new Entity({
 		name: settings.name || 'actor'
@@ -72,7 +73,9 @@ let Actor = function (settings) {
 	};
 
 	Object.defineProperties(actor, {
-		tile: { get: () => _tile }
+		tile: { get: () => _tile },
+		color: { get: () => _color },
+		coloredName: { get: () => `\\${_color}\\${actor.name}\\#fff\\` }
 	});
 
 	return actor;

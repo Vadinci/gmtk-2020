@@ -1,0 +1,8 @@
+name : Treasure
+tags : [treasure]
+color : '#fff200'
+
+components : 
+  sprite : 
+    pictureName : 'main/treasure'
+    origin : {x : 20, y : 20}

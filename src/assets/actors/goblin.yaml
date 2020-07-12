@@ -1,5 +1,6 @@
 name : Goblin
 tags : [goblin, monster]
+color : '#6ad042'
 
 components : 
   sprite : 

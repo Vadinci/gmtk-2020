@@ -36,6 +36,8 @@ let Log = function () {
 
 	let _glyphPic = Marzipan.assets.get('picture', GLYPH_PIC);
 
+	let _color = '#fff';
+
 	let log = new Scene({
 		name: 'log',
 		depth: 50
@@ -71,15 +73,17 @@ let Log = function () {
 	log.addEntity(content);
 
 	let writeGlyph = function (glyph) {
-		if (glyph[0] === " ") {
+		glyph = glyph[0];
+		if (glyph === '') {
 			if (++_glyphCol > GLYPHS_PER_LINE) breakLine();
 			return;
 		};
 
-		let frameIdx = GLYPH_ORDER.indexOf(glyph[0]);
+		let frameIdx = GLYPH_ORDER.indexOf(glyph);
 		let sx = (frameIdx % (_glyphPic.width / GLYPH_WIDTH)) * GLYPH_WIDTH;
 		let sy = Math.floor(frameIdx / (_glyphPic.width / GLYPH_WIDTH)) * GLYPH_HEIGHT;
 
+		//draw the actual glyph
 		logCanvas.context.drawImage(
 			_glyphPic.image,
 			sx, sy,
@@ -87,6 +91,18 @@ let Log = function () {
 			_glyphCol * GLYPH_WIDTH, _glyphRow * (GLYPH_HEIGHT + 1),
 			GLYPH_WIDTH, GLYPH_HEIGHT
 		);
+
+		//composite colored rectangle on top
+		logCanvas.context.globalCompositeOperation = 'source-atop';
+
+		logCanvas.context.fillStyle = _color;
+		logCanvas.context.fillRect(
+			_glyphCol * GLYPH_WIDTH, _glyphRow * (GLYPH_HEIGHT + 1),
+			GLYPH_WIDTH, GLYPH_HEIGHT
+		);
+
+		//reset composite mode
+		logCanvas.context.globalCompositeOperation = 'source-over';
 
 		if (++_glyphCol > GLYPHS_PER_LINE) breakLine();
 	};
@@ -97,12 +113,33 @@ let Log = function () {
 		for (let ii = 0; ii < words.length; ii++) {
 			let word = words[ii];
 
-			if (_glyphCol + word.length > GLYPHS_PER_LINE) {
+			let length = word.length;
+			if (word.indexOf('\\') !== -1) {
+				let idx = 0;
+				while (word.indexOf('\\', idx + 1) !== -1) {
+					let modLength = word.indexOf('\\', idx + 1) - idx;
+					length -= modLength;
+					idx += modLength;
+					idx = word.indexOf('\\', idx + 1);
+					if (idx === -1) break;
+				}
+			};
+
+			if (_glyphCol + length > GLYPHS_PER_LINE) {
 				breakLine();
 			}
 
 			for (let jj = 0; jj < word.length; jj++) {
-				writeGlyph(word[jj]);
+				let glyph = word[jj];
+				if (glyph === '\\') {
+					let next = word.indexOf('\\', jj + 1);
+					let parsed = word.substring(jj + 1, next);
+					//TODO so far we just set color
+					setColor(parsed);
+					jj = next;
+				} else {
+					writeGlyph(glyph);
+				}
 			}
 			writeGlyph(' ');
 		}
@@ -134,18 +171,23 @@ let Log = function () {
 		_glyphRow -= amount;
 	};
 
+	let setColor = function (c) {
+		_color = c;
+	};
+
 	log.writeGlyph = writeGlyph;
 	log.writeString = writeString;
 	log.breakLine = breakLine;
 	log.writeLine = writeLine;
 	log.scrollUp = scrollUp;
+	log.setColor = setColor;
 
-	log.on('start', ()=>{
+	log.on('start', () => {
 		Marzipan.events.on('logLine', writeLine);
 		Marzipan.events.on('logBreak', breakLine);
 	});
 
-	log.on('die', ()=>{
+	log.on('die', () => {
 		Marzipan.events.off('logLine', writeLine);
 		Marzipan.events.off('logBreak', breakLine);
 	});

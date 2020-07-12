@@ -1,10 +1,12 @@
 assets:
   actors/goblin: actors/goblin.yaml
   actors/hero: actors/hero.yaml
+  actors/treasure: actors/treasure.yaml
   main/buttons: main/buttons.png
   main/goblin: main/goblin.png
   main/hero: main/hero.png
   main/tiles: main/tiles.png
+  main/treasure: main/treasure.png
   main/walls: main/walls.png
   ui/button_confirm: ui/button_confirm.png
   ui/button_reset: ui/button_reset.png

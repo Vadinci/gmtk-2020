@@ -65,6 +65,14 @@ let GenerateState = function (context, machine) {
 			tile.addActor(goblin);
 			context.gameScene.addEntity(goblin);
 		}
+
+		//place some treasure
+		for (let ii = 0; ii < 2; ii++) {
+			let tile = tiles.pop();
+			let treasure = new Actor(Marzipan.assets.get('yaml', 'actors/treasure'));
+			tile.addActor(treasure);
+			context.gameScene.addEntity(treasure);
+		}
 	};
 
 

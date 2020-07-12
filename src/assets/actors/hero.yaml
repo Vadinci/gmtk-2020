@@ -1,5 +1,6 @@
 name : Hero
 tags : [hero, human]
+color : '#1abdf0'
 
 components : 
   sprite : 
