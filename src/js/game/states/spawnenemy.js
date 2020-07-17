@@ -4,13 +4,23 @@ import Game from "game/game";
 import Session from "game/session";
 import Actor from "game/entities/actor";
 
+const INTERVALS = [
+	{ max: 5, min: 2 },
+	{ max: 4, min: 2 },
+	{ max: 4, min: 1 },
+	{ max: 3, min: 2 },
+	{ max: 3, min: 1 },
+	{ max: 2, min: 1 },
+	{ max: 1, min: 1 }
+];
+
 let SpawnEnemyState = function (context, machine) {
-	//Variables
-	let _confirmHud;
+	//Variable	
+	let intervalSet = INTERVALS[Math.min(Session.floor, INTERVALS.length - 1)];
 
 	//TODO
-	let _maxInterval = 5;
-	let _minInterval = 2;
+	let _maxInterval = intervalSet.max;
+	let _minInterval = intervalSet.min;
 
 	let _currentInterval = _maxInterval;
 	let _counter = 0;
@@ -33,7 +43,7 @@ let SpawnEnemyState = function (context, machine) {
 	};
 
 	let end = function () {
-		
+
 	};
 
 	//Handlers
